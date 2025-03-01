@@ -1,32 +1,27 @@
 const fs = require('fs/promises');
-const notes = require('./db.json');
 const chalk = require('chalk');
+const Note = require('./models/note')
 
 async function addNote(title) {
-	const note = {
-		title,
-		id: Date.now(),
-		toString,
-	};
-
-	notes.push(note);
-
-	await fs.writeFile('./db.json', JSON.stringify(notes));
+	await Note.create({title})
+	console.log('Note was added!')
 }
-function getNotes() {
-	console.log(chalk.bgGreen('Here is the list of notes:'));
-	notes.forEach((note) => {
-		console.log(`${note.id} ${note.title}`);
-	});
+async function getNotes  () {
+	return notes = await Note.find()
 }
 
-async function removeNote(targetId) {
-	const updatedNotes = notes.filter((note) => note.id !== targetId)
-	await fs.writeFile('./db.json', JSON.stringify(updatedNotes));
+async function removeNote(id) {
+	await Note.deleteOne({_id: id})
+	console.log('Note was deleted!')
+}
+
+async function editNote(targetId,newTitle) {
+	await Note.updateOne({_id: targetId},{title: newTitle})
 }
 
 module.exports = {
 	addNote,
 	getNotes,
 	removeNote,
+	editNote
 };
