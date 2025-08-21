@@ -6,7 +6,6 @@ async function addNote(title) {
 	const note = {
 		title,
 		id: Date.now(),
-		toString,
 	};
 
 	notes.push(note);
